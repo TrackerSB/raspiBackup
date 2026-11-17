@@ -71,6 +71,7 @@ declare -A REQUIRED_COMMANDS=( \
 		["fdisk"]="fdisk" \
 		["blkid"]="util-linux" \
 		["sfdisk"]="fdisk" \
+		["wget"]="wget" \
 		["curl"]="curl" \
 		)
 
@@ -1708,7 +1709,11 @@ function existsLocalPropertiesFile() {
 
 function checkRequiredDirectories() {
 
-	local dirs=( "$BIN_DIR" "$ETC_DIR" "$CRON_DIR")
+	local dirs=( "$BIN_DIR" "$ETC_DIR" )
+
+        if (( ! USE_SYSTEMD )); then
+            dirs+=( "$CRON_DIR" )
+        fi
 
 	for d in "${dirs[@]}"; do
 		logItem "Checking for $d"
